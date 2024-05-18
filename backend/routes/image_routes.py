@@ -27,7 +27,7 @@ def load_image() -> list:
 @router.get("/overview")
 def get_images_overview() -> list:
     try:
-        with session_manager as db:
+        with session_manager() as db:
             img_list = get_img_references(db)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

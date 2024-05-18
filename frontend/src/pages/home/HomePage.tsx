@@ -15,6 +15,7 @@ import AppButton from "../../components/app-button";
 import BalsamiqTheme from "../../themes/theme";
 import ImgFilesList from "../../components/img-list";
 import VerticalLine from "../../components/vertical-line";
+import DrawingApp from "../../components/img-drawing";
 
 const exampleArray = [
   "Image1.png",
@@ -42,7 +43,8 @@ const exampleArray = [
 const HomePage = () => {
   return (
     <ThemeProvider theme={BalsamiqTheme}>
-      <Grid
+      <DrawingApp />
+      {/* <Grid
         container
         alignItems="center"
         justifyContent="center"
@@ -65,9 +67,8 @@ const HomePage = () => {
           <VerticalLine />
         </Grid>
         <Grid item xs={12} style={{ height: "calc(100vh * 4/12)" }}>
-          {/* Add content for the lowest section here */}
         </Grid>
-      </Grid>
+      </Grid> */}
     </ThemeProvider>
   );
 };
