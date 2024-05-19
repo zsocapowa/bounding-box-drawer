@@ -1,5 +1,11 @@
+import { Box } from "@mui/material";
 import React, { useRef, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+
+interface DrawingContainerProps {
+  canvasWidth: number;
+  canvasHeight: number;
+}
 
 interface Box {
   id: string;
@@ -17,7 +23,7 @@ interface ResizeHandle {
   size: number;
 }
 
-const DrawingApp = () => {
+const DrawingApp = ({ canvasWidth, canvasHeight }: DrawingContainerProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement>(null);
   const [boxes, setBoxes] = useState<Box[]>([]);
@@ -33,6 +39,7 @@ const DrawingApp = () => {
   // draw the box
   const drawBox = (ctx: CanvasRenderingContext2D, box: Box): void => {
     ctx.beginPath();
+    ctx.lineWidth = 4.5;
     ctx.strokeStyle = colour;
     ctx.rect(box.x, box.y, box.width, box.height);
     ctx.stroke();
@@ -84,7 +91,7 @@ const DrawingApp = () => {
 
   // create resize handle squares in the middle of each edge of the box
   const createResizeHandles = (box: Box): ResizeHandle[] => {
-    const size = 10;
+    const size = 25;
     return [
       {
         position: "mt",
@@ -252,27 +259,63 @@ const DrawingApp = () => {
     );
   };
 
-  const canvasWidth = 800; // Width in pixels
-  const canvasHeight = 600; // Height in pixels
-
   // ... rest of the component
 
   return (
-    <div className="drawing-container" style={{ position: 'relative', width: `${canvasWidth}px`, height: `${canvasHeight}px` }}>
+    <div
+      className="drawing-container"
+      style={{
+        position: "relative",
+        width: `${canvasWidth}px`,
+        height: `${canvasHeight}px`,
+        margin: "50px",
+        boxShadow: "0px 0px 10px #ccc",
+        backgroundColor: "#fff",
+        border: "4px solid #000", // Thicker border
+        display: "flex", // Use flexbox to center children
+        flexDirection: "column", // Stack children vertically
+        justifyContent: "flex-end", // Align children to the end (bottom)
+        alignItems: "flex-end", // Center children horizontally
+      }}
+    >
+      <div
+        style={{
+          fontSize: '1.2rem',
+          position: "absolute",
+          top: "-25px", // Adjust the distance from the top border as needed
+          left: "10px", // Adjust the distance from the left border as needed
+          padding: "5px", // Add padding for spacing
+          backgroundColor: "#fff", // Background color for the text
+        }}
+      >
+        Cat_on_rumba.png
+      </div>
       {/* Background canvas for the static image */}
       <canvas
         ref={backgroundCanvasRef}
-        width={canvasWidth}
-        height={canvasHeight}
-        style={{ position: 'absolute', top: 0, left: 0 }}
+        width={canvasWidth * 0.93}
+        height={canvasHeight * 0.85}
+        style={{
+          position: "absolute",
+          bottom: "15px", // Move to the bottom of the div
+          right: "15px", // Move to the bottom of the div
+          // left: "50%", // Center horizontally
+          // transform: "translateX(-50%)", // Offset by half the width to center
+        }}
       />
 
       {/* Main canvas for drawing boxes */}
       <canvas
         ref={canvasRef}
-        width={canvasWidth}
-        height={canvasHeight}
-        style={{ position: 'absolute', top: 0, left: 0 }}
+        width={canvasWidth * 0.93}
+        height={canvasHeight * 0.85}
+        style={{
+          position: "absolute",
+          bottom: "15px", // Move to the bottom of the div
+          right: "15px", // Move to the bottom of the div
+          // left: "50%", // Center horizontally
+          // transform: "translateX(-50%)", // Offset by half the width to center
+        }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
