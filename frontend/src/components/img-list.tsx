@@ -1,8 +1,14 @@
-import { ThemeProvider, ListItemText, List, ListItem, ListItemButton} from "@mui/material";
+import {
+  ThemeProvider,
+  ListItemText,
+  List,
+  ListItemButton,
+} from "@mui/material";
 import BalsamiqTheme from "../themes/theme";
 import { FileItem } from "./vertical-line";
 
 interface ImgListItemProps {
+  key: string;
   file: FileItem | null;
   color: string;
 }
@@ -11,11 +17,11 @@ interface ImgFilesListProps {
   files: FileItem[];
 }
 
-const ImgListItem = ({ file, color }: ImgListItemProps) => {
+const ImgListItem = ({ key, file, color }: ImgListItemProps) => {
   return (
     <ListItemButton
-      key={file?.file_id}
-      onClick={() => (console.log("ssss"))}
+      key={key}
+      onClick={() => console.log("ssss")}
       sx={{
         backgroundColor: color,
         maxHeight: "5vh",
@@ -25,13 +31,20 @@ const ImgListItem = ({ file, color }: ImgListItemProps) => {
         justifyContent: "center", // Horizontally center the content
       }}
     >
-      <ListItemText primary={file?.file_name} />
+      <ListItemText
+        primary={file?.file_name}
+        primaryTypographyProps={{
+          noWrap: true, // Prevent wrapping of text
+          overflow: "hidden", // Hide overflow
+          textOverflow: "ellipsis", // Show ellipsis (...) for overflowed content
+          whiteSpace: "nowrap", // Keep the text in a single line
+        }}
+      />
     </ListItemButton>
   );
 };
 
 const ImgFilesList = ({ files }: ImgFilesListProps) => {
-  console.log("dddddddddddd", files);
   return (
     <ThemeProvider theme={BalsamiqTheme}>
       <List
@@ -50,7 +63,7 @@ const ImgFilesList = ({ files }: ImgFilesListProps) => {
       >
         {files.map((file, index) => (
           <ImgListItem
-            key={index}
+            key={file.file_id}
             file={file}
             color={index % 2 === 0 ? "white" : "#DDDDDD"}
           />
@@ -59,7 +72,7 @@ const ImgFilesList = ({ files }: ImgFilesListProps) => {
           .fill(null)
           .map((_, index) => (
             <ImgListItem
-              key={index + files.length}
+              key={(index + files.length).toString()}
               file={null}
               color={(index + files.length) % 2 === 0 ? "white" : "#DDDDDD"}
             />

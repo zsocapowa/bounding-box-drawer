@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, HTTPException, File, UploadFile
-from services.image_services import get_img_references
+from services.image_services import get_img_references, save_img_reference
 from database.session import session_manager
 
 router = APIRouter(prefix='/images')
@@ -8,9 +8,12 @@ router = APIRouter(prefix='/images')
 @router.post("/save")
 async def save_image(image: UploadFile = File(...)) -> dict:
     try:
-        return {"message": "Image uploaded successfully"}
+        with session_manager() as db:
+            new_img_data = save_img_reference(db, {"file_name": image.filename})
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    else:
+        return new_img_data
 
 
 @router.get("/load")

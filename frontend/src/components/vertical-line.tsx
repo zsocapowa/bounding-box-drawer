@@ -4,13 +4,15 @@ import AppButton from "./app-button";
 import ImgFilesList from "./img-list";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { HomePageProps } from "../pages/home/HomePage";
+import LoadButton from "./load-button";
 
 export interface FileItem {
   file_id: string;
   file_name: string;
 }
 
-const VerticalLine = () => {
+const VerticalLine = ({ setIsHomePage }: HomePageProps) => {
   const [files, setFiles] = useState<FileItem[]>([]);
 
   useEffect(() => {
@@ -28,13 +30,15 @@ const VerticalLine = () => {
     fetchData();
   }, []);
 
-  console.log("oveerview", files);
-
   return (
     <Grid container alignItems="center" justifyContent="center">
       <ThemeProvider theme={BalsamiqTheme}>
         <Grid item xs={5} container justifyContent="center">
-          {/* <AppButton buttonName="Open Image" fileNames={fileNames} setFileNames={setFileNames}/> */}
+          <AppButton
+            buttonName="Open Image"
+            files={files}
+            setFiles={setFiles}
+          />
         </Grid>
         <Grid item xs={1}></Grid>
         <Grid item xs={1}>
@@ -81,7 +85,7 @@ const VerticalLine = () => {
         >
           <Typography variant="h6">Select a saved iamge</Typography>
           <ImgFilesList files={files} />
-          {/* <AppButton buttonName="Load Image" /> */}
+          <LoadButton buttonName="Load Image" setIsHomePage={setIsHomePage}/>
         </Grid>
       </ThemeProvider>
     </Grid>

@@ -6,7 +6,7 @@ from database.db_models import Picture, BoundingBox
 from logger import logger
 
 
-def save_img_reference(db: Session, data: dict) -> str:
+def save_img_reference(db: Session, data: dict) -> dict:
     try:
         file_name = data.get("file_name")
         new_img_ref = Picture(**data)
@@ -16,7 +16,7 @@ def save_img_reference(db: Session, data: dict) -> str:
         db.rollback()
         logger.exception(f"Failed to add new img to table, file_name: {file_name}, error: {e}")
     else:
-        return new_img_ref.id
+        return {"file_id": new_img_ref.id, "file_name": new_img_ref.file_name}
 
 
 def get_img_references(db: Session) -> list:
