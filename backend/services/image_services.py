@@ -25,7 +25,6 @@ def generate_presigned_img_url(file_name: str) -> str:
         region_name=AWS_REGION,
         aws_access_key_id=AWS_CLIENT_ID,
         aws_secret_access_key=AWS_CLIENT_SECRET,
-        config=Config(signature_version='s3v4')
     )
     presigned_url = client.generate_presigned_url(
         "get_object",
@@ -83,3 +82,8 @@ def save_bounding_boxes(db: Session, img_id: str, boxes: list):
     except Exception as e:
         db.rollback()
         logger.exception(f"Failed to perform bulk insert for boxoes, error: {e}")
+
+
+if __name__ == "__main__":
+    a = generate_presigned_img_url("aaaa(2).png")
+    print("ddd")

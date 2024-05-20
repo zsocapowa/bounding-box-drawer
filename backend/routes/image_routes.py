@@ -3,6 +3,7 @@ from services.image_services import get_img_references, save_img_reference, save
     generate_presigned_img_url, get_img_data
 from database.session import session_manager
 from database.db_models import Picture
+from backend.config import BUCKET
 
 router = APIRouter(prefix='/images')
 
@@ -35,7 +36,10 @@ def load_image(img_id: str) -> dict:
     try:
         with session_manager() as db:
             img_dict = get_img_data(db, img_id)
-            img_dict["url"] = generate_presigned_img_url(img_dict.get("img_file_name"))
+            # TODO: this doesnt't work, probably AWS permission related issue, templ solution is added
+            # img_dict["url"] = generate_presigned_img_url(img_dict.get("img_file_name"))
+            file_name = img_dict.get("img_file_name")
+            img_dict["url"] = f"https://{BUCKET}.s3.eu-central-1.amazonaws.com/{file_name}"
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     else:
@@ -51,4 +55,3 @@ def get_images_overview() -> list:
         raise HTTPException(status_code=400, detail=str(e))
     else:
         return img_list
-

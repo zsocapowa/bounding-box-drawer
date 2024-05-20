@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  fastapi:
+    build: ./backend
+    ports:
+      - "3333:3333"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_CLIENT_ID=${AWS_CLIENT_ID}
+      - AWS_CLIENT_SECRET=${AWS_CLIENT_SECRET}
+      - BUCKET=${BUCKET}
+    depends_on:
+      - db
+    command: python database/init_db.py
+
+
+  react:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - fastapi
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

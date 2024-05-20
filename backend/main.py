@@ -8,8 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes import image_routes
 
 from config import ENV
-# from routes import user, users
-# from logger import logger
+
 
 app = FastAPI()
 
