@@ -1,6 +1,6 @@
 import { Grid, Typography, Box, ThemeProvider } from "@mui/material";
 import BalsamiqTheme from "../themes/theme";
-import AppButton from "./app-button";
+import UploadButton from "./upload-button";
 import ImgFilesList from "./img-list";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -12,7 +12,13 @@ export interface FileItem {
   file_name: string;
 }
 
-const VerticalLine = ({ setIsHomePage }: HomePageProps) => {
+const VerticalLine = ({
+  setIsHomePage,
+  selectedImgId,
+  setSelectedImgId,
+  setBoxes,
+  setPresignedUrl,
+}: HomePageProps) => {
   const [files, setFiles] = useState<FileItem[]>([]);
 
   useEffect(() => {
@@ -34,11 +40,7 @@ const VerticalLine = ({ setIsHomePage }: HomePageProps) => {
     <Grid container alignItems="center" justifyContent="center">
       <ThemeProvider theme={BalsamiqTheme}>
         <Grid item xs={5} container justifyContent="center">
-          <AppButton
-            buttonName="Open Image"
-            files={files}
-            setFiles={setFiles}
-          />
+          <UploadButton buttonName="Open Image" setFiles={setFiles} />
         </Grid>
         <Grid item xs={1}></Grid>
         <Grid item xs={1}>
@@ -83,9 +85,15 @@ const VerticalLine = ({ setIsHomePage }: HomePageProps) => {
           alignItems="center"
           direction="column"
         >
-          <Typography variant="h6">Select a saved iamge</Typography>
-          <ImgFilesList files={files} />
-          <LoadButton buttonName="Load Image" setIsHomePage={setIsHomePage}/>
+          <Typography variant="h5">Select a saved image</Typography>
+          <ImgFilesList files={files} setSelectedImgId={setSelectedImgId} />
+          <LoadButton
+            buttonName="Load Image"
+            setIsHomePage={setIsHomePage}
+            selectedImgId={selectedImgId}
+            setBoxes={setBoxes}
+            setPresignedUrl={setPresignedUrl}
+          />
         </Grid>
       </ThemeProvider>
     </Grid>

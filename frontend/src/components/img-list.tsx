@@ -8,24 +8,31 @@ import BalsamiqTheme from "../themes/theme";
 import { FileItem } from "./vertical-line";
 
 interface ImgListItemProps {
-  key: string;
+  id: string;
   file: FileItem | null;
   color: string;
+  setSelectedImgId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 interface ImgFilesListProps {
   files: FileItem[];
+  setSelectedImgId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const ImgListItem = ({ key, file, color }: ImgListItemProps) => {
+const ImgListItem = ({
+  id,
+  file,
+  color,
+  setSelectedImgId,
+}: ImgListItemProps) => {
   return (
     <ListItemButton
-      key={key}
-      onClick={() => console.log("ssss")}
+      key={id}
+      onClick={() => setSelectedImgId(file ? id : null)}
       sx={{
         backgroundColor: color,
-        maxHeight: "5vh",
         minWidth: "25vh",
+        flexGrow: 1,
         display: "flex", // Ensure the ListItem is a flex container
         alignItems: "center", // Vertically center the content
         justifyContent: "center", // Horizontally center the content
@@ -44,7 +51,7 @@ const ImgListItem = ({ key, file, color }: ImgListItemProps) => {
   );
 };
 
-const ImgFilesList = ({ files }: ImgFilesListProps) => {
+const ImgFilesList = ({ files, setSelectedImgId }: ImgFilesListProps) => {
   return (
     <ThemeProvider theme={BalsamiqTheme}>
       <List
@@ -56,25 +63,30 @@ const ImgFilesList = ({ files }: ImgFilesListProps) => {
           paddingBottom: 0,
           marginTop: 1,
           marginBottom: 2,
-          maxHeight: "25vh",
+          maxHeight: "30vh",
           overflow: "auto",
-          maxWidth: "30vh",
+          // maxWidth: "30vh",
+          height: "calc(100vh * 6/12)",
+          display: "flex", // Set the List to be a flex container
+          flexDirection: "column",
         }}
       >
         {files.map((file, index) => (
           <ImgListItem
-            key={file.file_id}
+            id={file.file_id}
             file={file}
             color={index % 2 === 0 ? "white" : "#DDDDDD"}
+            setSelectedImgId={setSelectedImgId}
           />
         ))}
         {Array(Math.max(0, 5 - files.length))
           .fill(null)
           .map((_, index) => (
             <ImgListItem
-              key={(index + files.length).toString()}
+              id={(index + files.length).toString()}
               file={null}
               color={(index + files.length) % 2 === 0 ? "white" : "#DDDDDD"}
+              setSelectedImgId={setSelectedImgId}
             />
           ))}
       </List>

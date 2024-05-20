@@ -2,38 +2,36 @@ import Button from "@mui/material/Button";
 import { ThemeProvider } from "@mui/material";
 import BalsamiqTheme from "../themes/theme";
 import axios from "axios";
+import { FileItem } from "./vertical-line";
 import { Box } from "../pages/home/ImgEditorPage";
 
-interface SaveButtonProps {
+interface DeleteButtonProps {
   buttonName: string;
   boxes: Box[];
-  selectedImgId: string | null;
+  setBoxes: React.Dispatch<React.SetStateAction<Box[]>>;
+  selectedBoxId: string | null;
+  setSelectedBoxId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const SaveButton = ({ buttonName, boxes, selectedImgId }: SaveButtonProps) => {
-  const handleBoxesSave = async () => {
-    try {
-      const imgBoxes = { imgage_id: selectedImgId, boxes: boxes };
-      await axios.post(
-        "http://localhost:3333/api/images/save",
-        imgBoxes,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      alert("Boxes saved successfully");
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Failed to save boxes");
+const DeleteButton = ({
+  buttonName,
+  boxes,
+  setBoxes,
+  selectedBoxId,
+  setSelectedBoxId,
+}: DeleteButtonProps) => {
+  const deleteSelectedBox = () => {
+    if (selectedBoxId) {
+      const updatedBoxes = boxes.filter((box) => box.id !== selectedBoxId);
+      setBoxes(updatedBoxes);
+      setSelectedBoxId(null);
     }
   };
-
   return (
     <ThemeProvider theme={BalsamiqTheme}>
       <Button
-        onClick={handleBoxesSave}
+        onClick={deleteSelectedBox}
+        disabled={selectedBoxId === null}
         variant="contained"
         component="label"
         size="large"
@@ -61,4 +59,4 @@ const SaveButton = ({ buttonName, boxes, selectedImgId }: SaveButtonProps) => {
   );
 };
 
-export default SaveButton;
+export default DeleteButton;

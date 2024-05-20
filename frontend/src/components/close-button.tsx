@@ -1,39 +1,20 @@
 import Button from "@mui/material/Button";
 import { ThemeProvider } from "@mui/material";
 import BalsamiqTheme from "../themes/theme";
-import axios from "axios";
-import { Box } from "../pages/home/ImgEditorPage";
 
-interface SaveButtonProps {
+interface CloseButtonProps {
   buttonName: string;
-  boxes: Box[];
-  selectedImgId: string | null;
+  setIsHomePage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SaveButton = ({ buttonName, boxes, selectedImgId }: SaveButtonProps) => {
-  const handleBoxesSave = async () => {
-    try {
-      const imgBoxes = { imgage_id: selectedImgId, boxes: boxes };
-      await axios.post(
-        "http://localhost:3333/api/images/save",
-        imgBoxes,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      alert("Boxes saved successfully");
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Failed to save boxes");
-    }
+const CloseButton = ({ buttonName, setIsHomePage }: CloseButtonProps) => {
+  const handleClick = () => {
+    setIsHomePage(true);
   };
-
   return (
     <ThemeProvider theme={BalsamiqTheme}>
       <Button
-        onClick={handleBoxesSave}
+        onClick={handleClick}
         variant="contained"
         component="label"
         size="large"
@@ -61,4 +42,4 @@ const SaveButton = ({ buttonName, boxes, selectedImgId }: SaveButtonProps) => {
   );
 };
 
-export default SaveButton;
+export default CloseButton;

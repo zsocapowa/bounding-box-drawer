@@ -4,13 +4,12 @@ import BalsamiqTheme from "../themes/theme";
 import axios from "axios";
 import { FileItem } from "./vertical-line";
 
-interface AppButtonProps {
+interface UploadButtonProps {
   buttonName: string;
-  files: FileItem[];
   setFiles: React.Dispatch<React.SetStateAction<FileItem[]>>;
 }
 
-const AppButton = ({ buttonName, files, setFiles }: AppButtonProps) => {
+const UploadButton = ({ buttonName, setFiles }: UploadButtonProps) => {
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -22,7 +21,7 @@ const AppButton = ({ buttonName, files, setFiles }: AppButtonProps) => {
 
         // TODO: put endpoint call to env
         const response = await axios.post(
-          "http://localhost:3333/api/images/save",
+          "http://localhost:3333/api/images/upload",
           formData,
           {
             headers: {
@@ -52,12 +51,14 @@ const AppButton = ({ buttonName, files, setFiles }: AppButtonProps) => {
         variant="contained"
         component="label"
         sx={{
+          padding: "0px 10px", // Add padding for button size
           textTransform: "none",
           boxShadow: "4px 4px 0px rgba(0,0,0,1)",
+          fontSize: "1.5rem",
           borderRadius: 0,
           color: "black",
           backgroundColor: "white",
-          border: "3px solid black",
+          border: "4px solid black",
           width: "40%",
           height: "6%",
           "&:hover": {
@@ -77,4 +78,4 @@ const AppButton = ({ buttonName, files, setFiles }: AppButtonProps) => {
   );
 };
 
-export default AppButton;
+export default UploadButton;

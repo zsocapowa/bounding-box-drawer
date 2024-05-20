@@ -1,34 +1,29 @@
-import { Box } from "@mui/material";
 import React, { useRef, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { Box, ResizeHandle } from "../pages/home/ImgEditorPage";
 
 interface DrawingContainerProps {
   canvasWidth: number;
   canvasHeight: number;
+  boxes: Box[];
+  setBoxes: React.Dispatch<React.SetStateAction<Box[]>>;
+  selectedBoxId: string | null;
+  setSelectedBoxId: React.Dispatch<React.SetStateAction<string | null>>;
+  presignedUrl: string | null;
 }
 
-interface Box {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  resizeHandles?: ResizeHandle[];
-}
-
-interface ResizeHandle {
-  position: "mt" | "mb" | "ml" | "mr";
-  x: number;
-  y: number;
-  size: number;
-}
-
-const DrawingApp = ({ canvasWidth, canvasHeight }: DrawingContainerProps) => {
+const DrawingApp = ({
+  canvasWidth,
+  canvasHeight,
+  boxes,
+  setBoxes,
+  selectedBoxId,
+  setSelectedBoxId,
+  presignedUrl,
+}: DrawingContainerProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const backgroundCanvasRef = useRef<HTMLCanvasElement>(null);
-  const [boxes, setBoxes] = useState<Box[]>([]);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [selectedBoxId, setSelectedBoxId] = useState<string | null>(null);
   const [isResizing, setIsResizing] = useState(false);
   const [selectedHandle, setSelectedHandle] = useState<ResizeHandle | null>(
     null
@@ -64,13 +59,13 @@ const DrawingApp = ({ canvasWidth, canvasHeight }: DrawingContainerProps) => {
     const ctx = backgroundCanvas?.getContext("2d");
     if (ctx && !backgroundImageLoaded) {
       const image = new Image();
-      image.src = "cat_on_rumba.jpg";
+      image.src = presignedUrl ? presignedUrl : "";
       image.onload = () => {
         ctx.drawImage(image, 0, 0, ctx.canvas.width, ctx.canvas.height);
         setBackgroundImageLoaded(true);
       };
     }
-  }, [backgroundImageLoaded]);
+  }, [backgroundImageLoaded, presignedUrl]);
 
   // Redraw the boxes on the main canvas without clearing the background image
   useEffect(() => {
@@ -280,7 +275,7 @@ const DrawingApp = ({ canvasWidth, canvasHeight }: DrawingContainerProps) => {
     >
       <div
         style={{
-          fontSize: '1.2rem',
+          fontSize: "1.2rem",
           position: "absolute",
           top: "-25px", // Adjust the distance from the top border as needed
           left: "10px", // Adjust the distance from the left border as needed
