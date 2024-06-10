@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "imagetwin"
+name = "bounding-box-drawer"
 version = "0.1.0"
 description = ""
 authors = ["zsocapowa <zsoca.powa@gmail.com>"]
